@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEOREADER</title>
+    <link rel="icon" type="image/x-icon" href="./src/icon.ico">
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+    <img src="./src/logo.png">
+    <div id="state"></div>
+    <div id="last"></div>
+    <div id="display"></div>
+</body>
+</html>
+
+<script>
+let last = Date.now();
+const port = window.location.search.substring(1);
+const socket = new WebSocket("ws://localhost:808");
+socket.addEventListener("open", function (event) {
+  console.log("Connected to WebSocket server");
+  document.getElementById("state").innerHTML = "Connected to WebSocket server";
+  document.getElementById("state").style.color = "green";
+});
+
+socket.addEventListener("message", function (event) {
+  console.log("Received message:", event.data);
+  const arr = JSON.parse(event.data);
+  document.getElementById("display").innerHTML = "";
+  arr[1].forEach((element) => {
+    document.getElementById("display").innerHTML += `<h2>${element[1]}</h2>`;
+  });
+  last = arr[0];
+  console.log("Received array:", arr);
+});
+
+socket.addEventListener("close", function (event) {
+  console.log("Connection closed");
+  document.getElementById("state").innerHTML = "Connection closed";
+  document.getElementById("state").style.color = "red";
+});
+
+setInterval(() => {
+  let time = `${Math.round((Date.now() - last) / 100) / 10}`;
+  console.log(typeof time);
+  if (!time.includes(".")) {
+    time += ".0";
+  }
+  document.getElementById("last").innerHTML = `${time} Seconds ago`;
+}, 100);
+
+</script>
