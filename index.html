@@ -11,6 +11,7 @@
     <img src="./src/logo.png">
     <div id="state"></div>
     <div id="last"></div>
+    <a id="mapsLink" target="_blank">Google Maps</a>
     <div id="display"></div>
 </body>
 </html>
@@ -26,12 +27,14 @@ socket.addEventListener("open", function (event) {
 });
 
 socket.addEventListener("message", function (event) {
-  console.log("Received message:", event.data);
+  // console.log("Received message:", event.data);
   const arr = JSON.parse(event.data);
   document.getElementById("display").innerHTML = "";
   arr[1].forEach((element) => {
     document.getElementById("display").innerHTML += `<h2>${element[1]}</h2>`;
   });
+  document.getElementById("mapsLink").href = `https://www.google.com/maps?q&layer=c&cbll=${arr[1][11][1]},${arr[1][12][1]}&cbp=0,undefined,0,0,undefined`
+
   last = arr[0];
   console.log("Received array:", arr);
 });
@@ -44,7 +47,6 @@ socket.addEventListener("close", function (event) {
 
 setInterval(() => {
   let time = `${Math.round((Date.now() - last) / 100) / 10}`;
-  console.log(typeof time);
   if (!time.includes(".")) {
     time += ".0";
   }
