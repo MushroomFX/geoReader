@@ -8,80 +8,34 @@
     <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
-    <img src="./src/logo.png">
+    <div id="logo">
+      <img src="./src/logo.png">
+    </div>
     <div id="state"></div>
     <div id="last"></div>
-    <a id="mapsLink" target="_blank">Google Maps</a>
-    <br>
-    <input type="checkbox" id="animations" name="animations"/>
-    <label for="animations">Disable Animations</label>
-    <div id="display"></div>
+
+    <div class="category" name="Links" isExpanded="true">
+      <a id="streetView" target="_blank">Street View</a>
+      <a id="streetMap" target="_blank">Street Map</a>
+      <iframe id="streetMapEmbed" src="" width="0" height="0" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">Street Map</iframe>
+    </div>
+    
+    <div class="category" name="Lat/Long" isExpanded="false">
+      <div id="lat"></div>
+      <div id="long"></div>
+    </div>
+
+    <div class="category" name="Data" isExpanded="false">
+      <div class="category" name="Filtered" isExpanded="false">
+        <div id="display"></div>
+      </div>
+      <div class="category" name="Raw" isExpanded="false">
+        <div id="rawData"></div>
+      </div>
+    </div>
 </body>
 </html>
 
-<script>
-let last = Date.now();
-const port = window.location.search.substring(1);
-const socket = new WebSocket("ws://localhost:808");
-socket.addEventListener("open", function (event) {
-  console.log("Connected to WebSocket server");
-  document.getElementById("state").innerHTML = "Connected to WebSocket server";
-  document.getElementById("state").style.color = "green";
-});
-
-socket.addEventListener("message", function (event) {
-  // console.log("Received message:", event.data);
-  const arr = JSON.parse(event.data);
-  document.getElementById("display").innerHTML = "";
-  
-  let firstNullIndex = 0
-
-  arr[1].forEach((element,i) => {
-    document.getElementById("display").innerHTML += `<h2>${element[1]}</h2>`;
-    if(element.indexOf(null)>-1 && firstNullIndex==0){
-      firstNullIndex = i
-    }
-  });
-
-  animateElements()
-
-  document.getElementById("mapsLink").href = `https://www.google.com/maps?q&layer=c&cbll=${arr[1][firstNullIndex+4][1]},${arr[1][firstNullIndex+5][1]}&cbp=0,undefined,0,0,undefined`
-
-  last = arr[0];
-  console.log("Received array:", arr);
-});
-
-socket.addEventListener("close", function (event) {
-  console.log("Connection closed");
-  document.getElementById("state").innerHTML = "Connection closed";
-  document.getElementById("state").style.color = "red";
-});
-
-setInterval(() => {
-  let time = `${Math.round((Date.now() - last) / 100) / 10}`;
-  if (!time.includes(".")) {
-    time += ".0";
-  }
-  document.getElementById("last").innerHTML = `${time} Seconds ago`;
-}, 100);
-
-function animateElements(){
-  if(document.getElementById("animations").checked){
-    return
-  }
-  const entrys = document.querySelectorAll("#display > *")
-  entrys.forEach((el,i)=>{
-    el.style.transition = `transform 0ms, opacity 0ms, filter 0ms`
-    el.style.transform = `translate(-100%)`
-    el.style.opacity = 0
-    el.style.filter = `blur(2em)`
-    setTimeout(()=>{
-      el.style.transition = `transform ${50*i+250}ms, opacity ${50*i+250}ms, filter ${50*i+250}ms`
-      el.style.transform = `translate(0%)`
-      el.style.opacity = 1
-      el.style.filter = `blur(0)`
-    },1)
-  })
-}
-
-</script>
+ <script src="./src/scripts/websocket.js"></script>
+ <script src="./src/scripts/map.js"></script>
+ <script src="./src/scripts/utils.js"></script>
