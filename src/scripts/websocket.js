@@ -1,12 +1,16 @@
 let socket;
 
+const stateElem = document.getElementById("state");
+stateElem.innerHTML = "No WebSocket server found!";
+stateElem.style.color = "var(--state_disconnected)"
+
 function connectWebSocket() {
   socket = new WebSocket("ws://localhost:808");
 
   socket.addEventListener("open", function (event) {
     console.log("Connected to WebSocket server");
-    document.getElementById("state").innerHTML = "Connected to WebSocket server";
-    document.getElementById("state").style.color = "green";
+    stateElem.innerHTML = "Connected to WebSocket server";
+    stateElem.style.color = "var(--state_active)";
   });
 
   socket.addEventListener("message", function (event) {
@@ -17,9 +21,9 @@ function connectWebSocket() {
 
   socket.addEventListener("close", function (event) {
     console.log("Connection closed. Attempting to reconnect...");
-    document.getElementById("state").innerHTML = "Connection closed. Reconnecting...";
-    document.getElementById("state").style.color = "orange";
-    
+    stateElem.innerHTML = "Connection closed. Reconnecting...";
+    stateElem.style.color = "var(--state_reconnecting)";
+
     // Attempt to reconnect after 3 seconds
     setTimeout(connectWebSocket, 3000);
   });

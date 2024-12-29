@@ -14,7 +14,7 @@ function updateCoordinates(arr, secondString) {
   
     document.getElementById("streetView").href = `https://www.google.com/maps?q&layer=c&cbll=${limitFloat(lat)},${limitFloat(long)}&cbp=0,undefined,0,0,undefined`;
     document.getElementById("streetMap").href = openStreetMap(lat, long);
-    document.getElementById("streetMapEmbed").src = openStreetMapEmbed(lat, long);
+    document.getElementById("streetMapEmbed").src = openStreetMapEmbed(lat, long,10);
     document.getElementById("streetMapEmbed").style.width = "100%"
     document.getElementById("streetMapEmbed").style.height = "auto"
     document.getElementById("streetMapEmbed").style.minHeight = "50vh";
@@ -24,8 +24,9 @@ function updateCoordinates(arr, secondString) {
     return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`;
   };
 
-  function openStreetMapEmbed(lat,long){
-    const latDiff = 0.005
-    const lonDiff = 0.02
+  function openStreetMapEmbed(lat,long,zoom = 1){
+    zoom = Math.abs(zoom)
+    const latDiff = 0.005 * zoom
+    const lonDiff = 0.02 * zoom
     return `https://www.openstreetmap.org/export/embed.html?bbox=${long-lonDiff}%2C${lat-latDiff}%2C${long+lonDiff}%2C${lat+latDiff}&layer=mapnik&marker=${lat}%2C${long}`
   }

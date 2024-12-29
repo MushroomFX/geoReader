@@ -9,29 +9,40 @@
 }
 
 :root {
-  --mainColor: hsl(345, 100%, 50%);
-  --mainColor2: hsl(345, 100%, 40%);
+  --mainColor: hsl(295, 94%, 79%);
+  --mainColor2: hsl(295, 94%, 69%);
+  --secnColor: hsl(208, 100%, 69%);
+  --secnColor2: hsl(208, 100%, 59%);
 
   --mainBlack: hsl(240, 20%, 5%);
   --mainBlack2: hsl(240, 20%, 15%);
   --mainBlack3: hsl(240, 20%, 25%);
   --mainWhite: hsl(240, 100%, 97%);
 
-  --mainColor_50: hsla(345, 100%, 50%, 0.5);
-  --mainColor2_50: hsla(345, 100%, 40%, 0.5);
+  --mainColor_50: hsla(295, 94%, 79%, 0.5);
+  --mainColor2_50: hsla(295, 94%, 69%, 0.5);
+  --secnColor_50: hsl(208, 100%, 69%, 0.5);
+  --secnColor2_50: hsl(208, 100%, 59%, 0.5);
 
   --mainBlack_50: hsla(240, 20%, 5%, 0.5);
   --mainBlack2_50: hsla(240, 20%, 15%, 0.5);
   --mainBlack3_50: hsla(240, 20%, 25%, 0.5);
   --mainWhite_50: hsla(240, 100%, 97%, 0.5);
 
-  --mainColor_75: hsla(345, 100%, 50%, 0.75);
-  --mainColor2_75: hsla(345, 100%, 40%, 0.75);
+  --mainColor_75: hsla(295, 94%, 79%, 0.75);
+  --mainColor2_75: hsla(295, 94%, 69%, 0.75);
+  --secnColor_75: hsl(208, 100%, 69%, 0.75);
+  --secnColor2_75: hsl(208, 100%, 59%, 0.75);
 
   --mainBlack_75: hsla(240, 20%, 5%, 0.75);
   --mainBlack2_75: hsla(240, 20%, 15%, 0.75);
   --mainBlack3_75: hsla(240, 20%, 25%, 0.75);
   --mainWhite_75: hsla(240, 100%, 97%, 0.75);
+
+
+  --state_active: hsl(115, 100%, 75%);
+  --state_reconnecting: hsl(54, 100%, 75%);
+  --state_disconnected: hsl(347, 100%, 75%);
 
   --textSize: 2em;
   --layerIndex: 0;
@@ -52,6 +63,22 @@ body {
   overflow-x: hidden;
   background: var(--mainBlack);
   color: var(--mainWhite);
+  
+  background-image: url("./map.jpg");
+  background-size: auto 150%;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+
+  animation: idleScroll 36s linear infinite;
+}
+
+@keyframes idleScroll {
+  from {
+    background-position-x: 0%;
+  }
+  to {
+    background-position-x: 100%;
+  }
 }
 
 .upperCase {
@@ -62,9 +89,31 @@ iframe {
   border-radius: 0.5em;
 }
 
+a {
+  color: var(--secnColor);
+  font-weight: 900;
+}
+
+a[href]:hover {
+  color: var(--secnColor2);
+  text-shadow: 0 0 1em var(--secnColor);
+}
+
+a:not([href]) {
+  color: var(--mainWhite_50);
+}
+
 #logo {
   display: flex;
   justify-content: center;
+}
+#logo > img{
+  height: 5em;
+  padding-top: 1em;
+}
+
+#state {
+  text-align: center;
 }
 
 .category {
@@ -76,6 +125,7 @@ iframe {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  box-shadow:  0 0 1em 0 var(--mainBlack);
 }
 
 .category:hover{
@@ -114,4 +164,27 @@ iframe {
 
 .category[isExpanded="false"] > *:first-child::before {
   content: " ▲";
+}
+
+
+#background{
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: 100vw;
+  max-height: 100vw;
+  width: auto;
+  height: auto;
+}
+
+#backgroundGradient{
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--mainBlack);
+  background: linear-gradient(180deg, var(--mainBlack) 0%, var(--mainBlack_75) 100%);
+  backdrop-filter: blur(.25em)  brightness(50%) saturate(50%);
 }
