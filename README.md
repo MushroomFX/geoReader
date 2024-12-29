@@ -1,5 +1,4 @@
-# ![geoReader](./src/logo.png)
-A tool for reading a **GeoPhotoService.js** file and displaying its data on a webpage.
+A tool for reading a **GeoPhotoService.js** file and displaying its data on a local webpage.
 
 ### Setup:
  1. Download [Node.js](https://nodejs.org/en/download)
